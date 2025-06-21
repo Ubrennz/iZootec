@@ -28,53 +28,32 @@ def cadastroPropriedade(page: ft.Page):
             )
 
             t.value = f'''Textboxes values are:
-            '{nome_propriedade.value}',
-            '{nome_proprietario.value}', 
-            '{endereco_propriedade.value}', 
-            '{float(tamanho_propriedade_em_hectares.value)}', 
-            '{int(numero_piquetes.value)}'
-            '{int(numero_curais.value)}'
-            '{int(qtde_funcionarios.value)}'
+            '{nome_propriedade.value}'
+            '{nome_proprietario.value}'
+            '{endereco_propriedade.value}'
+            {float(tamanho_propriedade_em_hectares.value)}
+            {int(numero_piquetes.value)}
+            {int(numero_curais.value)}
+            {int(qtde_funcionarios.value)}
             '{'Sim' if possui_maquinas_sim.value else 'Não' if possui_maquinas_nao.value else 'Não informado'}'
             '{quais_maquinas.value}'
-            '{int(qtde_total_animais.value)}'
+            {int(qtde_total_animais.value)}
             '{raca_predominante.value}'
             '{sistema_criacao}'
-            '{'Sim' if usa_racao_sim.value else 'Não' if usa_racao_nao.value else 'Não informado'}'.'''
+            '{'Sim' if usa_racao_sim.value else 'Não' if usa_racao_nao.value else 'Não informado'}
+            '{'Concentrado' if tipo_alimentacao_concentrado.value else 'Volumoso' if tipo_alimentacao_volumoso else 'Não informado'}'.'''
         except ValueError:
             t.value = "Preencha todos os campos corretamente! (Atenção aos campos numéricos)"
         
         page.update()
 
-    def checkbox_possui_maquinas(e):
-        if e.control == possui_maquinas_sim and possui_maquinas_sim.value:
-            possui_maquinas_nao.value = False
-        elif e.control == possui_maquinas_nao and possui_maquinas_nao.value:
-            possui_maquinas_sim.value = False
+    def checkbox(e, lista_checkbox):
+        for checkbox in lista_checkbox:
+            if checkbox != e.control:
+                checkbox.value = False
 
         page.update()
-
-    def checkbox_sistema_criacao(e):
-        if e.control == sistema_criacao_confinamento and sistema_criacao_confinamento.value:
-            sistema_criacao_semi_confinado.value = False
-            sistema_criacao_apasto.value = False
-        elif e.control == sistema_criacao_semi_confinado and sistema_criacao_semi_confinado.value:
-            sistema_criacao_confinamento.value = False
-            sistema_criacao_apasto.value = False
-        elif e.control == sistema_criacao_apasto and sistema_criacao_apasto.value:
-            sistema_criacao_confinamento.value = False
-            sistema_criacao_semi_confinado.value = False
-
-        page.update()
-
-    def checkbox_usa_racao(e):
-        if e.control == usa_racao_sim and usa_racao_sim.value:
-            usa_racao_nao.value = False
-        elif e.control == usa_racao_nao and usa_racao_nao.value:
-            usa_racao_sim.value = False
-
-        page.update()
-
+    
     t = ft.Text()
 
     estilo_padrao = {
@@ -91,6 +70,18 @@ def cadastroPropriedade(page: ft.Page):
         "label_style": ft.TextStyle(size=18, weight=ft.FontWeight.BOLD)
     }
 
+    estilo_container = {
+        "bgcolor": ft.Colors.WHITE,
+        "border":ft.border.all(1, ft.Colors.GREY),
+        "border_radius": 8,
+        "padding": 10        
+    }
+
+    estilo_content = {
+        "weight": ft.FontWeight.BOLD,
+        "size": 18
+    }
+
     nome_propriedade = ft.TextField(hint_text="Nome da Propriedade", **estilo_padrao)
     nome_proprietario = ft.TextField(hint_text="Nome do Proprietario", **estilo_padrao)
     endereco_propriedade = ft.TextField(hint_text="Endereço da Propriedade", **estilo_padrao)
@@ -101,60 +92,75 @@ def cadastroPropriedade(page: ft.Page):
         
     possui_maquinas_sim = ft.Checkbox(label="Sim", **estilo_label)
     possui_maquinas_nao = ft.Checkbox(label="Não", **estilo_label)
-    possui_maquinas_sim.on_change = checkbox_possui_maquinas
-    possui_maquinas_nao.on_change = checkbox_possui_maquinas
+    possui_maquinas_sim.on_change = lambda e: checkbox(e, [possui_maquinas_sim, possui_maquinas_nao])
+    possui_maquinas_nao.on_change = lambda e: checkbox(e, [possui_maquinas_sim, possui_maquinas_nao])
 
+    quais_maquinas = ft.TextField(hint_text="Se sim, quais maquinas?", border=ft.InputBorder.UNDERLINE, **estilo_padrao)
+    
     possui_maquinas_container = ft.Container(
         content=ft.Column([
-            ft.Text("Possui máquinas?", weight="bold", size=18),
+            ft.Text("Possui máquinas?", **estilo_content),
             possui_maquinas_sim,
-            possui_maquinas_nao,            
+            possui_maquinas_nao,
+            quais_maquinas,
         ]),        
-        bgcolor=ft.Colors.WHITE,
-        border=ft.border.all(1, ft.Colors.GREY),
-        border_radius=8,
-        padding=10,        
+        **estilo_container        
     )
-
-    quais_maquinas = ft.TextField(hint_text="Quais maquinas?", **estilo_padrao)
+    
     qtde_total_animais = ft.TextField(hint_text="Quantidade Total de Animais", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
     raca_predominante = ft.TextField(hint_text="Raça Predominante", **estilo_padrao)
 
     sistema_criacao_confinamento = ft.Checkbox(label="Confinamento", **estilo_label)
     sistema_criacao_semi_confinado = ft.Checkbox(label="Semi-confinado", **estilo_label)
     sistema_criacao_apasto = ft.Checkbox(label="Apasto", **estilo_label)
-    sistema_criacao_confinamento.on_change = checkbox_sistema_criacao
-    sistema_criacao_semi_confinado.on_change = checkbox_sistema_criacao
-    sistema_criacao_apasto.on_change = checkbox_sistema_criacao
+    sistema_criacao_confinamento.on_change = lambda e: checkbox(e, [sistema_criacao_confinamento, sistema_criacao_semi_confinado, sistema_criacao_apasto])
+    sistema_criacao_semi_confinado.on_change = lambda e: checkbox(e, [sistema_criacao_confinamento, sistema_criacao_semi_confinado, sistema_criacao_apasto])
+    sistema_criacao_apasto.on_change = lambda e: checkbox(e, [sistema_criacao_confinamento, sistema_criacao_semi_confinado, sistema_criacao_apasto])
 
     sistema_criacao_container = ft.Container(
         content=ft.Column([
-            ft.Text("Sistema de Criacão", weight="bold", size=18),
+            ft.Text("Sistema de Criacão", **estilo_content),
             sistema_criacao_confinamento,
             sistema_criacao_semi_confinado,
             sistema_criacao_apasto,
         ]),        
-        bgcolor=ft.Colors.WHITE,
-        border=ft.border.all(1, ft.Colors.GREY),
-        border_radius=8,
-        padding=10,        
+        **estilo_container        
     )
 
     usa_racao_sim = ft.Checkbox(label="Sim", **estilo_label)
     usa_racao_nao = ft.Checkbox(label="Não", **estilo_label)
-    usa_racao_sim.on_change = checkbox_usa_racao
-    usa_racao_nao.on_change = checkbox_usa_racao
+    usa_racao_sim.on_change = lambda e: checkbox(e, [usa_racao_sim, usa_racao_nao])
+    usa_racao_nao.on_change = lambda e: checkbox(e, [usa_racao_sim, usa_racao_nao])
 
     usa_racao_container = ft.Container(
         content=ft.Column([
-            ft.Text("Usa ração?", weight="bold", size=18),
+            ft.Text("Usa ração?", **estilo_content),
             usa_racao_sim,
             usa_racao_nao,            
         ]),        
-        bgcolor=ft.Colors.WHITE,
-        border=ft.border.all(1, ft.Colors.GREY),
-        border_radius=8,
-        padding=10,        
+        **estilo_container       
+    )
+
+    tipo_alimentacao_concentrado = ft.Checkbox(label="Concentrado", **estilo_label)
+    tipo_alimentacao_volumoso = ft.Checkbox(label="Volumoso", **estilo_label)
+    tipo_alimentacao_concentrado.on_change = lambda e: checkbox(e, [tipo_alimentacao_concentrado, tipo_alimentacao_volumoso])
+    tipo_alimentacao_volumoso.on_change = lambda e: checkbox(e, [tipo_alimentacao_concentrado, tipo_alimentacao_volumoso])
+
+    fornece_sal_mineral_sim = ft.Checkbox(label="Sim", **estilo_label)
+    fornece_sal_mineral_nao = ft.Checkbox(label="Não", **estilo_label)
+    fornece_sal_mineral_sim.on_change = lambda e: checkbox(e, [fornece_sal_mineral_sim, fornece_sal_mineral_nao])
+    fornece_sal_mineral_nao.on_change = lambda e: checkbox(e, [fornece_sal_mineral_sim, fornece_sal_mineral_nao])
+
+    tipo_alimentacao_container = ft.Container(
+        content=ft.Column([
+            ft.Text("Tipo de Alimentação", **estilo_content),
+            tipo_alimentacao_concentrado,
+            tipo_alimentacao_volumoso,
+            ft.Text("Fornece Sal Mineral?", **estilo_content),
+            fornece_sal_mineral_sim,
+            fornece_sal_mineral_nao,
+        ]),        
+        **estilo_container
     )
 
     botao = ft.ElevatedButton(
@@ -179,12 +185,12 @@ def cadastroPropriedade(page: ft.Page):
                 numero_piquetes,
                 numero_curais,
                 qtde_funcionarios,
-                possui_maquinas_container,
-                quais_maquinas,
+                possui_maquinas_container,                
                 qtde_total_animais,
                 raca_predominante,
                 sistema_criacao_container,
-                usa_racao_container,                  
+                usa_racao_container,
+                tipo_alimentacao_container,                  
                 botao,
                 t
             ],
