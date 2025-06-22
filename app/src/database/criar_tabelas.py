@@ -19,7 +19,7 @@ def criar_tabela():
             id_produtor INTEGER PRIMARY KEY AUTOINCREMENT,
             id_tecnico INTEGER,
             nome_produtor TEXT NOT NULL,
-            cpf_produtor VACHAR(11) NOT NULL UNIQUE,
+            cpf_produtor VACHAR(14) NOT NULL UNIQUE,
             email_produtor TEXT NOT NULL,
             senha_produtor TEXT NOT NULL,            
             FOREIGN KEY(id_tecnico) REFERENCES Tecnico(id_tecnico)              
@@ -38,24 +38,24 @@ def criar_tabela():
             numero_piquetes INTEGER,
             numero_curais INTEGER,
             qtde_funcionarios INTEGER,
-            possui_maquinas INTEGER, -- BOOLEAN
+            possui_maquinas TEXT, -- BOOLEAN
             quais_maquinas TEXT,
-            qtde_total_animais INTEGER,
+            numero_total_animais INTEGER,
             raca_predominante TEXT,
             sistema_criacao TEXT, -- ENUM 
-            usa_racao INTEGER, -- BOOLEAN
+            usa_racao TEXT, -- BOOLEAN
             tipo_alimentacao TEXT,
-            fornece_sal INTEGER, -- BOOLEAN
-            faz_controle_vacinas INTEGER, -- BOOLEAN
+            fornece_sal TEXT, -- BOOLEAN
+            faz_controle_vacinas TEXT, -- BOOLEAN
             data_ultima_vacina_rebanho DATE,
             qtde_total_vacas_em_lactacao INTEGER,
-            qtde_vacas_secas INTEGER,
-            qtde_total_vacas INTEGER,
+            numero_vacas_secas INTEGER,
+            numero_total_vacas INTEGER,
             producao_diario_total_litros FLOAT,
             media_producao_por_vaca FLOAT,
             qtde_ordenhas_por_dia INTEGER,
             tipo_ordenha TEXT,
-            uso_pre_e_pos_dipping INTEGER, -- BOOLEAN
+            uso_pre_e_pos_dipping TEXT, -- BOOLEAN
             local_ordenha TEXT, -- ENUM
             leite_descartado_por_contaminacao_litros FLOAT,
             suplementacao_vacas_em_lactacao TEXT,
