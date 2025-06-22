@@ -4,22 +4,18 @@ from components import base as tb
 def cadastroTecnico(page: ft.Page):
     page.title = "Casdastro do Técnico" 
 
-    tb.topBar(page)
-
-    page.add(
-        ft.Text(
-            "Cadastro do Técnico",
-            size=40,
-            color=ft.Colors.BLACK,            
-        ),
-        ft.Container(height=3),     
-    )
+    tb.topBar(page)   
 
     def button_clicked(e):
         t.value = f"Textboxes values are: '{nome.value}', '{cpf.value}', '{telefone.value}', '{email.value}', '{senha.value}'."
         page.update()
 
     t = ft.Text()
+
+    estilo_sub_titulo = {
+        "size": 40,
+        "color": ft.Colors.BLACK
+    }
 
     estilo_padrao = {
         "border_color": ft.Colors.GREY,
@@ -29,6 +25,8 @@ def cadastroTecnico(page: ft.Page):
         "bgcolor": ft.Colors.WHITE,
         "color": ft.Colors.BLACK,        
     }
+
+    cadastro_do_tecnico = ft.Text("Cadastro do Técnico", **estilo_sub_titulo)
 
     nome = ft.TextField(hint_text="Nome Completo", **estilo_padrao)
     cpf = ft.TextField(hint_text="CPF", **estilo_padrao)
@@ -51,6 +49,7 @@ def cadastroTecnico(page: ft.Page):
     page.add(
         ft.Column(
             controls=[
+                cadastro_do_tecnico,
                 nome,
                 cpf,
                 telefone,
