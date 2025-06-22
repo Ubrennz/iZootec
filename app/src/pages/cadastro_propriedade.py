@@ -1,4 +1,5 @@
 import flet as ft
+import re
 from components import base as tb
 
 def cadastroPropriedade(page: ft.Page):
@@ -8,15 +9,6 @@ def cadastroPropriedade(page: ft.Page):
 
     page.scroll = ft.ScrollMode.ALWAYS
     page.update()
-
-    page.add(
-        ft.Text(
-            "Cadastro do Propriedade",
-            size=40,
-            color=ft.Colors.BLACK,            
-        ),
-        ft.Container(height=3),     
-    )
 
     def button_clicked(e):
         try:
@@ -37,11 +29,18 @@ def cadastroPropriedade(page: ft.Page):
             {int(qtde_funcionarios.value)}
             '{'Sim' if possui_maquinas_sim.value else 'Não' if possui_maquinas_nao.value else 'Não informado'}'
             '{quais_maquinas.value}'
-            {int(qtde_total_animais.value)}
+            {int(numero_total_animais.value)}
             '{raca_predominante.value}'
             '{sistema_criacao}'
-            '{'Sim' if usa_racao_sim.value else 'Não' if usa_racao_nao.value else 'Não informado'}
-            '{'Concentrado' if tipo_alimentacao_concentrado.value else 'Volumoso' if tipo_alimentacao_volumoso else 'Não informado'}'.'''
+            '{'Sim' if usa_racao_sim.value else 'Não' if usa_racao_nao.value else 'Não informado'}'
+            '{'Concentrado' if tipo_alimentacao_concentrado.value else 'Volumoso' if tipo_alimentacao_volumoso else 'Não informado'}'
+            '{'Sim' if faz_controle_vacina_sim else 'Nao' if faz_controle_vacina_nao else 'Não informado'}'
+            '{data_ultima_vacina_rebanho.value}'
+            {int(numero_total_vacas_em_lactacao.value)}
+            {int(numero_vacas_secas.value)}
+            {int(numero_total_vacas.value)}
+            {float(producao_diario_total_litros.value)}
+            {float(media_producao_por_vaca.value)}.'''
         except ValueError:
             t.value = "Preencha todos os campos corretamente! (Atenção aos campos numéricos)"
         
@@ -53,8 +52,31 @@ def cadastroPropriedade(page: ft.Page):
                 checkbox.value = False
 
         page.update()
-    
+
+    def aplicar_mascara(e):
+        texto = re.sub(r'\D', '', data_ultima_vacina_rebanho.value)
+        novo_texto = ""
+
+        if len(texto) >= 2:
+            novo_texto += texto[:2] + "/"
+        else:
+            novo_texto += texto
+        if len(texto) >= 4:
+            novo_texto += texto[2:4] + "/"
+        elif len(texto) > 2:
+            novo_texto += texto[2:]
+        if len(texto) >= 5:
+            novo_texto += texto[4:8]
+        
+        data_ultima_vacina_rebanho.value = novo_texto
+        data_ultima_vacina_rebanho.update()    
+
     t = ft.Text()
+
+    estilo_sub_titulo = {
+        "size": 40,
+        "color": ft.Colors.BLACK        
+    }
 
     estilo_padrao = {
         "border_color": ft.Colors.GREY,
@@ -82,6 +104,8 @@ def cadastroPropriedade(page: ft.Page):
         "size": 18
     }
 
+    cadastro_da_propriedade = ft.Text("Cadastro da Propriedade", **estilo_sub_titulo)
+
     nome_propriedade = ft.TextField(hint_text="Nome da Propriedade", **estilo_padrao)
     nome_proprietario = ft.TextField(hint_text="Nome do Proprietario", **estilo_padrao)
     endereco_propriedade = ft.TextField(hint_text="Endereço da Propriedade", **estilo_padrao)
@@ -107,7 +131,7 @@ def cadastroPropriedade(page: ft.Page):
         **estilo_container        
     )
     
-    qtde_total_animais = ft.TextField(hint_text="Quantidade Total de Animais", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
+    numero_total_animais = ft.TextField(hint_text="Número Total de Animais", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
     raca_predominante = ft.TextField(hint_text="Raça Predominante", **estilo_padrao)
 
     sistema_criacao_confinamento = ft.Checkbox(label="Confinamento", **estilo_label)
@@ -163,9 +187,33 @@ def cadastroPropriedade(page: ft.Page):
         **estilo_container
     )
 
+    faz_controle_vacina_sim = ft.Checkbox(label="Sim", **estilo_label)
+    faz_controle_vacina_nao = ft.Checkbox(label="Não", **estilo_label)
+    faz_controle_vacina_sim.on_change = lambda e: checkbox(e, [faz_controle_vacina_sim, faz_controle_vacina_nao])
+    faz_controle_vacina_nao.on_change = lambda e: checkbox(e, [faz_controle_vacina_sim, faz_controle_vacina_nao])
+
+    faz_controle_vacina_container = ft.Container(
+        content=ft.Column([
+            ft.Text("Faz Controle de Vacinas?", **estilo_content),
+            faz_controle_vacina_sim,
+            faz_controle_vacina_nao,            
+        ]),        
+        **estilo_container       
+    )
+
+    data_ultima_vacina_rebanho = ft.TextField(hint_text="Data da Última Vacina do Rebanho", **estilo_padrao, height=80, keyboard_type=ft.KeyboardType.NUMBER, on_change=aplicar_mascara)
+    
+    estrutura_do_rebanho_leiteiro = ft.Text("Estrutura do Rebanho Leiteiro", **estilo_sub_titulo)
+
+    numero_total_vacas_em_lactacao = ft.TextField(hint_text="Número Total das Vacas em Lactação", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
+    numero_vacas_secas = ft.TextField(hint_text="Número Total de Vacas Secas", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
+    numero_total_vacas = ft.TextField(hint_text="Número Total de Vacas", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
+    producao_diario_total_litros = ft.TextField(hint_text="Produção Diária Total (Média)", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
+    media_producao_por_vaca = ft.TextField(hint_text="Média de Produçao por Vaca", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
+
     botao = ft.ElevatedButton(
         text="Cadastrar",
-        on_click=button_clicked,
+        on_click=button_clicked,        
         color=ft.Colors.WHITE,
         bgcolor=ft.Colors.GREEN,
         style=ft.ButtonStyle(
@@ -178,6 +226,7 @@ def cadastroPropriedade(page: ft.Page):
     page.add(
         ft.Column(
             controls=[
+                cadastro_da_propriedade,
                 nome_propriedade,
                 nome_proprietario,
                 endereco_propriedade,
@@ -186,11 +235,19 @@ def cadastroPropriedade(page: ft.Page):
                 numero_curais,
                 qtde_funcionarios,
                 possui_maquinas_container,                
-                qtde_total_animais,
+                numero_total_animais,
                 raca_predominante,
                 sistema_criacao_container,
                 usa_racao_container,
-                tipo_alimentacao_container,                  
+                tipo_alimentacao_container,
+                faz_controle_vacina_container,
+                data_ultima_vacina_rebanho,
+                estrutura_do_rebanho_leiteiro,
+                numero_total_vacas_em_lactacao,
+                numero_vacas_secas,
+                numero_total_vacas,
+                producao_diario_total_litros,
+                media_producao_por_vaca,
                 botao,
                 t
             ],
