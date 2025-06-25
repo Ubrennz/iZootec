@@ -7,7 +7,7 @@ def cadastroPropriedade(page: ft.Page):
 
     tb.topBar(page)
 
-    page.scroll = ft.ScrollMode.ALWAYS
+    page.scroll = ft.ScrollMode.HIDDEN
     page.update()
 
     def button_clicked(e):
@@ -209,10 +209,63 @@ def cadastroPropriedade(page: ft.Page):
     numero_vacas_secas = ft.TextField(hint_text="Número Total de Vacas Secas", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
     numero_total_vacas = ft.TextField(hint_text="Número Total de Vacas", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
     producao_diario_total_litros = ft.TextField(hint_text="Produção Diária Total (Média)", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
-    media_producao_por_vaca = ft.TextField(hint_text="Média de Produçao por Vaca", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
+    media_producao_por_vaca = ft.TextField(hint_text="Média de Produçao por Vaca", **estilo_padrao, height=80 ,keyboard_type=ft.KeyboardType.NUMBER)
+
+    higiene_e_manejo = ft.Text("Higiene e Manejo", **estilo_sub_titulo)
+
+    # colocar no botao a partir daqui
+    uso_pre_e_pos_dipping_sim = ft.Checkbox(label="Sim", **estilo_label)
+    uso_pre_e_pos_dipping_nao = ft.Checkbox(label="Não", **estilo_label)
+    uso_pre_e_pos_dipping_sim.on_change = lambda e: checkbox(e, [uso_pre_e_pos_dipping_sim, uso_pre_e_pos_dipping_nao])
+    uso_pre_e_pos_dipping_nao.on_change = lambda e: checkbox(e, [uso_pre_e_pos_dipping_sim, uso_pre_e_pos_dipping_nao])
+
+    uso_pre_e_pos_dipping_container = ft.Container(
+        content=ft.Column([
+            ft.Text("Uso de Pré e Pós-Dipping", **estilo_content),
+            uso_pre_e_pos_dipping_sim,
+            uso_pre_e_pos_dipping_nao,
+        ]),
+        **estilo_container
+    )
+
+    local_ordenha_sim = ft.Checkbox(label="Curral", **estilo_label)
+    local_ordenha_nao = ft.Checkbox(label="Sala de Ordenha", **estilo_label)
+    local_ordenha_sim.on_change = lambda e: checkbox(e, [local_ordenha_sim, local_ordenha_nao])
+    local_ordenha_nao.on_change = lambda e: checkbox(e, [local_ordenha_sim, local_ordenha_nao])
+
+    local_ordenha_container = ft.Container(
+        content=ft.Column([
+            ft.Text("Local da Ordenha", **estilo_content),
+            local_ordenha_sim,
+            local_ordenha_nao,
+        ]),
+        **estilo_container
+    )
+
+    leite_descartado_por_contaminacao_litros = ft.TextField(hint_text="Leite Descardado por Contaminação (Litros)", **estilo_padrao, height=80, keyboard_type=ft.KeyboardType.NUMBER)
+
+    nutricao_e_bem_estar = ft.Text("Nutrição e Bem-Estar", **estilo_sub_titulo)
+
+    suplementacao_vacas_em_lactacao = ft.TextField(hint_text="Suplementão das Vacas em Lactação", **estilo_padrao)
+
+    pasto_disponivel_para_vacas_leiteiras_sim = ft.Checkbox(label="Sim", **estilo_label)
+    pasto_disponivel_para_vacas_leiteiras_nao = ft.Checkbox(label="Não", **estilo_label)
+    pasto_disponivel_para_vacas_leiteiras_sim.on_change = lambda e: checkbox(e, [pasto_disponivel_para_vacas_leiteiras_sim, pasto_disponivel_para_vacas_leiteiras_nao])
+    pasto_disponivel_para_vacas_leiteiras_nao.on_change = lambda e: checkbox(e, [pasto_disponivel_para_vacas_leiteiras_sim, pasto_disponivel_para_vacas_leiteiras_nao])
+
+    pasto_disponivel_para_vacas_leiteiras_container = ft.Container(
+        content=ft.Column([
+            ft.Text("Pasto Disponível para Vacas Leiteiras", **estilo_content),
+            pasto_disponivel_para_vacas_leiteiras_sim,
+            pasto_disponivel_para_vacas_leiteiras_nao,
+        ]),
+        **estilo_container
+    )
+
+    tipo_confinamento = ft.TextField(hint_text="Tipo de Confinamento", **estilo_padrao)
 
     botao = ft.ElevatedButton(
-        text="Cadastrar",
+        text="Salvar Dados",
         on_click=button_clicked,        
         color=ft.Colors.WHITE,
         bgcolor=ft.Colors.GREEN,
@@ -248,6 +301,14 @@ def cadastroPropriedade(page: ft.Page):
                 numero_total_vacas,
                 producao_diario_total_litros,
                 media_producao_por_vaca,
+                higiene_e_manejo,
+                uso_pre_e_pos_dipping_container,
+                local_ordenha_container,
+                leite_descartado_por_contaminacao_litros,
+                nutricao_e_bem_estar,
+                suplementacao_vacas_em_lactacao,
+                pasto_disponivel_para_vacas_leiteiras_container,
+                tipo_confinamento,
                 botao,
                 t
             ],
