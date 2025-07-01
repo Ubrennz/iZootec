@@ -1,11 +1,10 @@
 import flet as ft
-from pages import cadastro_produtor as produtor
-from pages import cadastro_tecnico as tecnico
-from pages import cadastro_propriedade as propriedade
+from database import criar_tabelas as tabelas
+from pages import primeira_tela as primeira
 
-def main(page: ft.Page):
-    propriedade.cadastroPropriedade(page)
-    # tecnico.cadastroTecnico(page)
-    # produtor.cadastroProdutor(page)
+def main(page: ft.Page):    
+    primeira.primeiraTela(page)
 
-ft.app(target=main, port=8551, host="0.0.0.0" )
+if __name__ == "__main__":
+    tabelas.criar_tabela() 
+    ft.app(target=main, view=ft.WEB_BROWSER)
