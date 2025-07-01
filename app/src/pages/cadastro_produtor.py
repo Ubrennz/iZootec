@@ -1,14 +1,30 @@
 import flet as ft
 from components import base as tb
+from components import cor_pagina as pagina
+from database import conexao_db
+
+from pages import cadastro_propriedade as propriedade
 
 def cadastroProdutor(page: ft.Page):
     page.title = "Casdastro do Produtor"
-    
-    tb.topBar(page)    
+
+    tb.topBar(page)
+    pagina.corPagina(page)     
 
     def button_clicked(e):
-        t.value = f"Textboxes values are: '{nome.value}', '{cpf.value}', '{telefone.value}', '{email.value}', '{senha.value}'."
-        page.update()
+        conn = conexao_db.conexao()
+        cursor = conn.cursor()       
+
+        cursor.execute('''
+            INSERT INTO Produtor (nome_produtor, cpf_produtor, telefone_produtor, email_produtor, senha_produtor)
+            VALUES (?, ?, ?, ?, ?)''', (nome.value, cpf.value, telefone.value, email.value, senha.value,))
+        
+        conn.commit()
+        conn.close()
+
+        page.clean()
+
+        propriedade.cadastroPropriedade(page)
 
     t = ft.Text()
 
@@ -29,8 +45,8 @@ def cadastroProdutor(page: ft.Page):
     cadastro_do_produtor = ft.Text("Cadastro do Produtor", **estilo_sub_titulo)
 
     nome = ft.TextField(hint_text="Nome Completo", **estilo_padrao)
-    cpf = ft.TextField(hint_text="CPF", **estilo_padrao)
-    telefone = ft.TextField(hint_text="Telefone", **estilo_padrao)
+    cpf = ft.TextField(hint_text="CPF", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
+    telefone = ft.TextField(hint_text="Telefone", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
     email = ft.TextField(hint_text="E-mail", **estilo_padrao)
     senha = ft.TextField(hint_text="Senha", **estilo_padrao, password=True, can_reveal_password=True)
 
