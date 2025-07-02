@@ -1,7 +1,7 @@
-from conexao_db import conexao
+from database import conexao_db
 
 def criar_tabela():
-    conn = conexao()  
+    conn = conexao_db.conexao()
     cursor = conn.cursor()
 
     cursor.execute('''
@@ -9,6 +9,7 @@ def criar_tabela():
             id_tecnico INTEGER PRIMARY KEY AUTOINCREMENT,
             nome_tecnico TEXT NOT NULL,
             cpf_tecnico VACHAR(14) NOT NULL UNIQUE,
+            telefone_tecnico INTEGER,
             email_tecnico TEXT NOT NULL,
             senha_tecnico TEXT NOT NULL                   
         )    
@@ -20,6 +21,7 @@ def criar_tabela():
             id_tecnico INTEGER,
             nome_produtor TEXT NOT NULL,
             cpf_produtor VACHAR(14) NOT NULL UNIQUE,
+            telefone_produtor INTEGERs,
             email_produtor TEXT NOT NULL,
             senha_produtor TEXT NOT NULL,            
             FOREIGN KEY(id_tecnico) REFERENCES Tecnico(id_tecnico)              
@@ -59,7 +61,7 @@ def criar_tabela():
             local_ordenha TEXT, -- ENUM
             leite_descartado_por_contaminacao_litros FLOAT,
             suplementacao_vacas_em_lactacao TEXT,
-            pasto_disponivel_para_vacas_leiteiras INTEGER, -- BOOLEAN
+            pasto_disponivel_para_vacas_leiteiras TEXT, -- BOOLEAN
             tipo_confinamento TEXT,
             FOREIGN KEY(id_produtor) REFERENCES Produtor(id_produtor),
             FOREIGN KEY(id_tecnico) REFERENCES Tecnico(id_tecnico)
