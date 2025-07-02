@@ -1,14 +1,15 @@
 import flet as ft
 import re
 from components import base as tb
+from components import cor_pagina as pagina
+from database import conexao_db
 
 def cadastroPropriedade(page: ft.Page):
     page.title = "Casdastro da Propriedade"
-
+    
     tb.topBar(page)
-
+    pagina.corPagina(page)
     page.scroll = ft.ScrollMode.HIDDEN
-    page.update()
 
     def button_clicked(e):
         try:
@@ -19,32 +20,140 @@ def cadastroPropriedade(page: ft.Page):
                 "Não informado"
             )
 
-            t.value = f'''Textboxes values are:
-            '{nome_propriedade.value}'
-            '{nome_proprietario.value}'
-            '{endereco_propriedade.value}'
-            {float(tamanho_propriedade_em_hectares.value)}
-            {int(numero_piquetes.value)}
-            {int(numero_curais.value)}
-            {int(qtde_funcionarios.value)}
-            '{'Sim' if possui_maquinas_sim.value else 'Não' if possui_maquinas_nao.value else 'Não informado'}'
-            '{quais_maquinas.value}'
-            {int(numero_total_animais.value)}
-            '{raca_predominante.value}'
-            '{sistema_criacao}'
-            '{'Sim' if usa_racao_sim.value else 'Não' if usa_racao_nao.value else 'Não informado'}'
-            '{'Concentrado' if tipo_alimentacao_concentrado.value else 'Volumoso' if tipo_alimentacao_volumoso else 'Não informado'}'
-            '{'Sim' if faz_controle_vacina_sim else 'Nao' if faz_controle_vacina_nao else 'Não informado'}'
-            '{data_ultima_vacina_rebanho.value}'
-            {int(numero_total_vacas_em_lactacao.value)}
-            {int(numero_vacas_secas.value)}
-            {int(numero_total_vacas.value)}
-            {float(producao_diario_total_litros.value)}
-            {float(media_producao_por_vaca.value)}.'''
+            tipo_alimentacao = (
+                "Concentrado" if tipo_alimentacao_concentrado.value else
+                "Volumoso" if tipo_alimentacao_volumoso.value else
+                "Não informado"
+            )
+
+            uso_pre_pos_dipping = (
+                "Sim" if uso_pre_e_pos_dipping_sim.value else
+                "Não" if uso_pre_e_pos_dipping_nao.value else
+                "Não informado"
+            )
+
+            local_ordenha = (
+                "Curral" if local_ordenha_sim.value else
+                "Sala de Ordenha" if local_ordenha_nao.value else
+                "Não informado"
+            )
+
+            possui_maquinas = (
+                "Sim" if possui_maquinas_sim.value else
+                "Não" if possui_maquinas_nao.value else
+                "Não informado"
+            )
+
+            usa_racao = (
+                "Sim" if usa_racao_sim.value else
+                "Não" if usa_racao_nao.value else
+                "Não informado"
+            )
+
+            fornece_sal = (
+                "Sim" if fornece_sal_mineral_sim.value else
+                "Não" if fornece_sal_mineral_nao.value else
+                "Não informado"
+            )
+
+            faz_controle_vacinas = (
+                "Sim" if faz_controle_vacina_sim.value else
+                "Não" if faz_controle_vacina_nao.value else
+                "Não informado"
+            )
+
+            pasto_disponivel = (
+                "Sim" if pasto_disponivel_para_vacas_leiteiras_sim.value else
+                "Não" if pasto_disponivel_para_vacas_leiteiras_nao.value else
+                "Não informado"
+            )
+
+            conn = conexao_db.conexao()
+            cursor = conn.cursor()
+
+            cursor.execute('''
+                INSERT INTO Propriedade (
+                    id_produtor,
+                    id_tecnico,
+                    nome_propriedade,
+                    nome_propriedario,
+                    endereco_propriedade,
+                    tamanho_propriedade_em_hectares,
+                    numero_piquetes,
+                    numero_curais,
+                    qtde_funcionarios,
+                    possui_maquinas,
+                    quais_maquinas,
+                    numero_total_animais,
+                    raca_predominante,
+                    sistema_criacao,
+                    usa_racao,
+                    tipo_alimentacao,
+                    fornece_sal,
+                    faz_controle_vacinas,
+                    data_ultima_vacina_rebanho,
+                    qtde_total_vacas_em_lactacao,
+                    numero_vacas_secas,
+                    numero_total_vacas,
+                    producao_diario_total_litros,
+                    media_producao_por_vaca,
+                    qtde_ordenhas_por_dia,
+                    tipo_ordenha,
+                    uso_pre_e_pos_dipping,
+                    local_ordenha,
+                    leite_descartado_por_contaminacao_litros,
+                    suplementacao_vacas_em_lactacao,
+                    pasto_disponivel_para_vacas_leiteiras,
+                    tipo_confinamento
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                1,
+                1,
+                nome_propriedade.value,
+                nome_proprietario.value,
+                endereco_propriedade.value,
+                float(tamanho_propriedade_em_hectares.value),
+                int(numero_piquetes.value),
+                int(numero_curais.value),
+                int(qtde_funcionarios.value),
+                possui_maquinas,
+                quais_maquinas.value,
+                int(numero_total_animais.value),
+                raca_predominante.value,
+                sistema_criacao,
+                usa_racao,
+                tipo_alimentacao,
+                fornece_sal,
+                faz_controle_vacinas,
+                data_ultima_vacina_rebanho.value,
+                int(numero_total_vacas_em_lactacao.value),
+                int(numero_vacas_secas.value),
+                int(numero_total_vacas.value),
+                float(producao_diario_total_litros.value),
+                float(media_producao_por_vaca.value),
+                int(qtde_ordenhas_por_dia.value),
+                tipo_ordenha.value,
+                uso_pre_pos_dipping,
+                local_ordenha,
+                float(leite_descartado_por_contaminacao_litros.value),
+                suplementacao_vacas_em_lactacao.value,
+                pasto_disponivel,
+                tipo_confinamento.value
+            ))
+
+            conn.commit()
+            conn.close()
+
+            t.value = "Propriedade cadastrada com sucesso!"
+
         except ValueError:
-            t.value = "Preencha todos os campos corretamente! (Atenção aos campos numéricos)"
-        
+            t.value = "Erro: Verifique os campos numéricos obrigatórios."
+        except Exception as ex:
+            t.value = f"Erro: {ex}"
+
         page.update()
+
 
     def checkbox(e, lista_checkbox):
         for checkbox in lista_checkbox:
@@ -85,7 +194,7 @@ def cadastroPropriedade(page: ft.Page):
         "border_radius": 8,        
         "bgcolor": ft.Colors.WHITE,
         "color": ft.Colors.BLACK,
-        "text_style": ft.TextStyle(weight=ft.FontWeight.BOLD),     
+        "text_style": ft.TextStyle(weight=ft.FontWeight.BOLD)
     }
 
     estilo_label = {
@@ -209,11 +318,12 @@ def cadastroPropriedade(page: ft.Page):
     numero_vacas_secas = ft.TextField(hint_text="Número Total de Vacas Secas", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
     numero_total_vacas = ft.TextField(hint_text="Número Total de Vacas", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
     producao_diario_total_litros = ft.TextField(hint_text="Produção Diária Total (Média)", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
-    media_producao_por_vaca = ft.TextField(hint_text="Média de Produçao por Vaca", **estilo_padrao, height=80 ,keyboard_type=ft.KeyboardType.NUMBER)
+    media_producao_por_vaca = ft.TextField(hint_text="Média de Produçao por Vaca", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
+    qtde_ordenhas_por_dia = ft.TextField(hint_text="Quantidade de Ordenha por Dia", **estilo_padrao,keyboard_type=ft.KeyboardType.NUMBER)
+    tipo_ordenha = ft.TextField(hint_text="Tipo de Ordenha", **estilo_padrao, height=80)
 
     higiene_e_manejo = ft.Text("Higiene e Manejo", **estilo_sub_titulo)
-
-    # colocar no botao a partir daqui
+    
     uso_pre_e_pos_dipping_sim = ft.Checkbox(label="Sim", **estilo_label)
     uso_pre_e_pos_dipping_nao = ft.Checkbox(label="Não", **estilo_label)
     uso_pre_e_pos_dipping_sim.on_change = lambda e: checkbox(e, [uso_pre_e_pos_dipping_sim, uso_pre_e_pos_dipping_nao])
@@ -274,11 +384,11 @@ def cadastroPropriedade(page: ft.Page):
         ),
         height=50,
         width=100
-    )
-    
+    )    
+        
     page.add(
         ft.Column(
-            controls=[
+            controls=[            
                 cadastro_da_propriedade,
                 nome_propriedade,
                 nome_proprietario,
@@ -301,6 +411,8 @@ def cadastroPropriedade(page: ft.Page):
                 numero_total_vacas,
                 producao_diario_total_litros,
                 media_producao_por_vaca,
+                qtde_ordenhas_por_dia,
+                tipo_ordenha,
                 higiene_e_manejo,
                 uso_pre_e_pos_dipping_container,
                 local_ordenha_container,
@@ -310,9 +422,9 @@ def cadastroPropriedade(page: ft.Page):
                 pasto_disponivel_para_vacas_leiteiras_container,
                 tipo_confinamento,
                 botao,
-                t
+                t            
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            spacing=15            
+            spacing=15
         )
     )    
