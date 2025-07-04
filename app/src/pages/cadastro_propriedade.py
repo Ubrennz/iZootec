@@ -197,7 +197,12 @@ def cadastroPropriedade(page: ft.Page):
         "text_style": ft.TextStyle(weight=ft.FontWeight.BOLD)
     }
 
-    estilo_label = {
+    estilo_checkbox = {
+        "active_color": ft.Colors.GREEN_600,
+        "check_color": ft.Colors.WHITE
+    }
+
+    estilo_label = {        
         "label_style": ft.TextStyle(size=18, weight=ft.FontWeight.BOLD)
     }
 
@@ -223,8 +228,8 @@ def cadastroPropriedade(page: ft.Page):
     numero_curais = ft.TextField(hint_text="Número de Curais", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
     qtde_funcionarios = ft.TextField(hint_text="Quantidade de Funcionários", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
         
-    possui_maquinas_sim = ft.Checkbox(label="Sim", **estilo_label)
-    possui_maquinas_nao = ft.Checkbox(label="Não", **estilo_label)
+    possui_maquinas_sim = ft.Checkbox(label="Sim", **estilo_checkbox, **estilo_label)
+    possui_maquinas_nao = ft.Checkbox(label="Não", **estilo_checkbox, **estilo_label)
     possui_maquinas_sim.on_change = lambda e: checkbox(e, [possui_maquinas_sim, possui_maquinas_nao])
     possui_maquinas_nao.on_change = lambda e: checkbox(e, [possui_maquinas_sim, possui_maquinas_nao])
 
@@ -243,9 +248,9 @@ def cadastroPropriedade(page: ft.Page):
     numero_total_animais = ft.TextField(hint_text="Número Total de Animais", **estilo_padrao, keyboard_type=ft.KeyboardType.NUMBER)
     raca_predominante = ft.TextField(hint_text="Raça Predominante", **estilo_padrao)
 
-    sistema_criacao_confinamento = ft.Checkbox(label="Confinamento", **estilo_label)
-    sistema_criacao_semi_confinado = ft.Checkbox(label="Semi-confinado", **estilo_label)
-    sistema_criacao_apasto = ft.Checkbox(label="Apasto", **estilo_label)
+    sistema_criacao_confinamento = ft.Checkbox(label="Confinamento", **estilo_checkbox, **estilo_label)
+    sistema_criacao_semi_confinado = ft.Checkbox(label="Semi-confinado", **estilo_checkbox, **estilo_label)
+    sistema_criacao_apasto = ft.Checkbox(label="Apasto", **estilo_checkbox, **estilo_label)
     sistema_criacao_confinamento.on_change = lambda e: checkbox(e, [sistema_criacao_confinamento, sistema_criacao_semi_confinado, sistema_criacao_apasto])
     sistema_criacao_semi_confinado.on_change = lambda e: checkbox(e, [sistema_criacao_confinamento, sistema_criacao_semi_confinado, sistema_criacao_apasto])
     sistema_criacao_apasto.on_change = lambda e: checkbox(e, [sistema_criacao_confinamento, sistema_criacao_semi_confinado, sistema_criacao_apasto])
@@ -260,8 +265,8 @@ def cadastroPropriedade(page: ft.Page):
         **estilo_container        
     )
 
-    usa_racao_sim = ft.Checkbox(label="Sim", **estilo_label)
-    usa_racao_nao = ft.Checkbox(label="Não", **estilo_label)
+    usa_racao_sim = ft.Checkbox(label="Sim", **estilo_checkbox, **estilo_label)
+    usa_racao_nao = ft.Checkbox(label="Não", **estilo_checkbox, **estilo_label)
     usa_racao_sim.on_change = lambda e: checkbox(e, [usa_racao_sim, usa_racao_nao])
     usa_racao_nao.on_change = lambda e: checkbox(e, [usa_racao_sim, usa_racao_nao])
 
@@ -274,13 +279,13 @@ def cadastroPropriedade(page: ft.Page):
         **estilo_container       
     )
 
-    tipo_alimentacao_concentrado = ft.Checkbox(label="Concentrado", **estilo_label)
-    tipo_alimentacao_volumoso = ft.Checkbox(label="Volumoso", **estilo_label)
+    tipo_alimentacao_concentrado = ft.Checkbox(label="Concentrado", **estilo_checkbox, **estilo_label)
+    tipo_alimentacao_volumoso = ft.Checkbox(label="Volumoso", **estilo_checkbox, **estilo_label)
     tipo_alimentacao_concentrado.on_change = lambda e: checkbox(e, [tipo_alimentacao_concentrado, tipo_alimentacao_volumoso])
     tipo_alimentacao_volumoso.on_change = lambda e: checkbox(e, [tipo_alimentacao_concentrado, tipo_alimentacao_volumoso])
 
-    fornece_sal_mineral_sim = ft.Checkbox(label="Sim", **estilo_label)
-    fornece_sal_mineral_nao = ft.Checkbox(label="Não", **estilo_label)
+    fornece_sal_mineral_sim = ft.Checkbox(label="Sim", **estilo_checkbox, **estilo_label)
+    fornece_sal_mineral_nao = ft.Checkbox(label="Não", **estilo_checkbox, **estilo_label)
     fornece_sal_mineral_sim.on_change = lambda e: checkbox(e, [fornece_sal_mineral_sim, fornece_sal_mineral_nao])
     fornece_sal_mineral_nao.on_change = lambda e: checkbox(e, [fornece_sal_mineral_sim, fornece_sal_mineral_nao])
 
@@ -296,8 +301,8 @@ def cadastroPropriedade(page: ft.Page):
         **estilo_container
     )
 
-    faz_controle_vacina_sim = ft.Checkbox(label="Sim", **estilo_label)
-    faz_controle_vacina_nao = ft.Checkbox(label="Não", **estilo_label)
+    faz_controle_vacina_sim = ft.Checkbox(label="Sim", **estilo_checkbox, **estilo_label)
+    faz_controle_vacina_nao = ft.Checkbox(label="Não", **estilo_checkbox, **estilo_label)
     faz_controle_vacina_sim.on_change = lambda e: checkbox(e, [faz_controle_vacina_sim, faz_controle_vacina_nao])
     faz_controle_vacina_nao.on_change = lambda e: checkbox(e, [faz_controle_vacina_sim, faz_controle_vacina_nao])
 
@@ -324,8 +329,8 @@ def cadastroPropriedade(page: ft.Page):
 
     higiene_e_manejo = ft.Text("Higiene e Manejo", **estilo_sub_titulo)
     
-    uso_pre_e_pos_dipping_sim = ft.Checkbox(label="Sim", **estilo_label)
-    uso_pre_e_pos_dipping_nao = ft.Checkbox(label="Não", **estilo_label)
+    uso_pre_e_pos_dipping_sim = ft.Checkbox(label="Sim", **estilo_checkbox, **estilo_label)
+    uso_pre_e_pos_dipping_nao = ft.Checkbox(label="Não", **estilo_checkbox, **estilo_label)
     uso_pre_e_pos_dipping_sim.on_change = lambda e: checkbox(e, [uso_pre_e_pos_dipping_sim, uso_pre_e_pos_dipping_nao])
     uso_pre_e_pos_dipping_nao.on_change = lambda e: checkbox(e, [uso_pre_e_pos_dipping_sim, uso_pre_e_pos_dipping_nao])
 
@@ -338,8 +343,8 @@ def cadastroPropriedade(page: ft.Page):
         **estilo_container
     )
 
-    local_ordenha_sim = ft.Checkbox(label="Curral", **estilo_label)
-    local_ordenha_nao = ft.Checkbox(label="Sala de Ordenha", **estilo_label)
+    local_ordenha_sim = ft.Checkbox(label="Curral", **estilo_checkbox, **estilo_label)
+    local_ordenha_nao = ft.Checkbox(label="Sala de Ordenha", **estilo_checkbox, **estilo_label)
     local_ordenha_sim.on_change = lambda e: checkbox(e, [local_ordenha_sim, local_ordenha_nao])
     local_ordenha_nao.on_change = lambda e: checkbox(e, [local_ordenha_sim, local_ordenha_nao])
 
@@ -358,8 +363,8 @@ def cadastroPropriedade(page: ft.Page):
 
     suplementacao_vacas_em_lactacao = ft.TextField(hint_text="Suplementão das Vacas em Lactação", **estilo_padrao)
 
-    pasto_disponivel_para_vacas_leiteiras_sim = ft.Checkbox(label="Sim", **estilo_label)
-    pasto_disponivel_para_vacas_leiteiras_nao = ft.Checkbox(label="Não", **estilo_label)
+    pasto_disponivel_para_vacas_leiteiras_sim = ft.Checkbox(label="Sim", **estilo_checkbox, **estilo_label)
+    pasto_disponivel_para_vacas_leiteiras_nao = ft.Checkbox(label="Não", **estilo_checkbox, **estilo_label)
     pasto_disponivel_para_vacas_leiteiras_sim.on_change = lambda e: checkbox(e, [pasto_disponivel_para_vacas_leiteiras_sim, pasto_disponivel_para_vacas_leiteiras_nao])
     pasto_disponivel_para_vacas_leiteiras_nao.on_change = lambda e: checkbox(e, [pasto_disponivel_para_vacas_leiteiras_sim, pasto_disponivel_para_vacas_leiteiras_nao])
 
