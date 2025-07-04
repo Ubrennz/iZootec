@@ -4,6 +4,7 @@ from components import cor_pagina as pagina
 from database import conexao_db
 
 from pages import cadastro_propriedade as propriedade
+from pages import homepage_tecnico as tecnico
 
 def cadastroPessoa(page: ft.Page):
     page.title = "Casdastro" 
@@ -35,6 +36,7 @@ def cadastroPessoa(page: ft.Page):
                 conn.close()
 
                 page.clean()
+                tecnico.homepage(page)
         except Exception as e:
             print(f"erro: {e}")
         
@@ -61,7 +63,12 @@ def cadastroPessoa(page: ft.Page):
         "color": ft.Colors.BLACK,        
     }
 
-    estilo_label = {
+    estilo_checkbox = {
+        "active_color": ft.Colors.GREEN_600,
+        "check_color": ft.Colors.WHITE
+    }
+
+    estilo_label = {        
         "label_style": ft.TextStyle(size=18, weight=ft.FontWeight.BOLD)
     }
 
@@ -85,8 +92,8 @@ def cadastroPessoa(page: ft.Page):
     email = ft.TextField(hint_text="E-mail", **estilo_padrao)
     senha = ft.TextField(hint_text="Senha", **estilo_padrao, password=True, can_reveal_password=True)
 
-    tipo_pessoa_produtor = ft.Checkbox(label="Produtor", **estilo_label)
-    tipo_pessoa_tecnico = ft.Checkbox(label="Técnico", **estilo_label)
+    tipo_pessoa_produtor = ft.Checkbox(label="Produtor", **estilo_checkbox, **estilo_label)
+    tipo_pessoa_tecnico = ft.Checkbox(label="Técnico", **estilo_checkbox, **estilo_label)
     tipo_pessoa_produtor.on_change = lambda e: checkbox(e, [tipo_pessoa_produtor, tipo_pessoa_tecnico])
     tipo_pessoa_tecnico.on_change = lambda e: checkbox(e, [tipo_pessoa_produtor, tipo_pessoa_tecnico])
 
